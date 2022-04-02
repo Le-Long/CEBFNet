@@ -150,6 +150,15 @@ class Classifier:
 
             self.model.train()
 
+    def get_eval_loader(self, eval_examples):
+        if len(eval_examples) == 0:
+            logger.info('\n  No eval data!')
+            return []
+
+        eval_features = self.convert_examples_to_features(eval_examples, train=False)
+        eval_dataloader = get_eval_dataloader(eval_features, self.args.eval_batch_size)
+        return eval_dataloader
+
     def evaluate(self, eval_examples):
         if len(eval_examples) == 0:
             logger.info('\n  No eval data!')

@@ -19,6 +19,7 @@ from models.utils import InputExample
 from models.utils import load_intent_datasets, load_intent_examples, sample, print_results
 from models.utils import calc_oos_precision, calc_in_acc, calc_oos_recall, calc_oos_f1
 from models.utils import THRESHOLDS
+from temperature_scaling import ModelWithTemperature
 
 import time
 
@@ -187,6 +188,9 @@ def main():
                                args = args)
             
             model.train(intent_train_examples[j])
+            valid_loader = model.get_eval_loader(intent_dev_examples[j])
+            model = ModelWithTemperature(model.model)
+            model.set_temperature(valid_loader)
 
             if args.save_model_path:
                 if not os.path.exists(save_model_path):
