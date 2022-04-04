@@ -181,6 +181,9 @@ def main():
             model = Classifier(path = save_model_path,
                                label_list = label_lists[j],
                                args = args)
+            valid_loader = model.get_eval_loader(intent_dev_examples[j])
+            model_with_temperature = ModelWithTemperature(model.model)
+            model.model = model_with_temperature.set_temperature(valid_loader)
 
         else:
             model = Classifier(path = None,
@@ -188,9 +191,6 @@ def main():
                                args = args)
             
             model.train(intent_train_examples[j])
-            valid_loader = model.get_eval_loader(intent_dev_examples[j])
-            model = ModelWithTemperature(model.model)
-            model.set_temperature(valid_loader)
 
             if args.save_model_path:
                 if not os.path.exists(save_model_path):

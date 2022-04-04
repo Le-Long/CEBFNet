@@ -16,9 +16,12 @@ class ModelWithTemperature(nn.Module):
         self.model = model
         self.temperature = nn.Parameter(torch.ones(1) * 1.5)
 
-    def forward(self, input):
-        logits = self.model(input)
-        return self.temperature_scale(logits)
+    def forward(self, input_ids, attention_mask, token_type_ids):
+        output = self.model(input_ids=input_ids, attention_mask=attention_mask, token_type_ids=token_type_ids)
+        logits = list(output)
+        logits[0] = self.temperature_scale(logits[0])
+        output = tuple(logits)
+        return output
 
     def temperature_scale(self, logits):
         """
@@ -43,9 +46,11 @@ class ModelWithTemperature(nn.Module):
         logits_list = []
         labels_list = []
         with torch.no_grad():
-            for input, label in valid_loader:
+            for input, mask, segment, label in valid_loader:
                 input = input.cuda()
-                logits = self.model(input)
+                mask = mask.cuda()
+                segment = segment.cuda()
+                logits = self.model(input_ids=input, attention_mask=mask, token_type_ids=segment)[0]
                 logits_list.append(logits)
                 labels_list.append(label)
             logits = torch.cat(logits_list).cuda()
