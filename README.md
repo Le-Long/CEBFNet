@@ -16,10 +16,10 @@ To run vanilla RoBERTa and DNNC scaling experiments, refer to [the original DNNC
 ### CEBFNet
 The code for CEBFNet is modified from [codebase of NBFNet](https://github.com/DeepGraphLearning/NBFNet).
 Run the CEBFNet model on OOS CLINC Banking dataset
-'''
+```
 python run_nbfnet.py -c clinc_banking.yaml --gpus [0]
-'''
+```
 If you see the model stop at the first epoch, clear the cache
-'''
+```
 rm -r ~/.cache/torch_extensions/*
-'''
+```
