@@ -11,7 +11,7 @@ pip install torch==1.10.0+cu111 -f https://download.pytorch.org/whl/cu111/torch_
 pip install -r ./requirements.txt
 ```
 ### Baseline
-To run vanilla RoBERTa and DNNC scaling experiments, refer to [the original DNNC project](https://github.com/salesforce/DNNC-few-shot-intent). The code here only contains minimal edits.
+To run RoBERTa and DNNC scaling experiments, refer to [the original DNNC project](https://github.com/salesforce/DNNC-few-shot-intent). The code here only contains minimal edits (add temperature to vanilla model).
 
 ### CEBFNet
 The code for CEBFNet is modified from [codebase of NBFNet](https://github.com/DeepGraphLearning/NBFNet).
